@@ -1,20 +1,23 @@
 const publicationTopics = [
   {
-    number: '01',
-    title: 'Astrobiologia aplicada',
-    description: 'Lecturas sobre organismos, ambientes extremos y rutas posibles de adaptación.',
+    number: "01",
+    title: "Lorem ipsum dolor",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
-    number: '02',
-    title: 'Habitats y soporte vital',
-    description: 'Ideas para sistemas cerrados, cultivo, agua y energia en misiones prolongadas.',
+    number: "02",
+    title: "Lorem ipsum dolor",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
   {
-    number: '03',
-    title: 'Señales del cosmos',
-    description: 'Notas breves sobre exploración, tecnologia orbital y observación del cielo.',
+    number: "03",
+    title: "Lorem ipsum dolor",
+    description:
+      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
   },
-]
+];
 
 const PublicationsSection = () => {
   return (

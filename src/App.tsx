@@ -28,21 +28,30 @@ function ScrollToTop() {
   return null
 }
 
+function AppShell() {
+  const { pathname } = useLocation()
+  const shellClassName = pathname === '/' ? 'site-shell' : 'site-shell secondary-background'
+
+  return (
+    <div className={shellClassName}>
+      <Header />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/publicaciones" element={<PublicationsPage />} />
+        <Route path="/colaboradores" element={<CollaboratorsPage />} />
+        <Route path="/tablon-espacial" element={<SpaceBoardPage />} />
+        <Route path="/observatorio" element={<ObservatoryPage />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </div>
+  )
+}
+
 function App() {
   return (
     <Router basename="/">
       <ScrollToTop />
-      <div className="site-shell">
-        <Header />
-        <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/publicaciones" element={<PublicationsPage />} />
-          <Route path="/colaboradores" element={<CollaboratorsPage />} />
-          <Route path="/tablon-espacial" element={<SpaceBoardPage />} />
-          <Route path="/observatorio" element={<ObservatoryPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
-      </div>
+      <AppShell />
     </Router>
   )
 }
