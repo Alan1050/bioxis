@@ -28,7 +28,7 @@ const HomePage = () => {
   return (
     <main className={showIntro ? 'intro-playing' : ''}>
       {showIntro && <IntroScreen />}
-      <HeroSection />
+      <HeroSection enableEarth={!showIntro} />
       <HomeOverviewSection />
     </main>
   )

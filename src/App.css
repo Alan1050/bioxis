@@ -226,12 +226,35 @@
   pointer-events: none;
 }
 
+.intro-brand {
+  display: grid;
+  place-items: center;
+  gap: 12px;
+  width: min(82vw, 620px);
+}
+
 .intro-logo {
   width: min(72vw, 560px);
   height: auto;
   object-fit: contain;
   filter: drop-shadow(0 0 24px rgba(255, 255, 255, 0.16));
   animation: logoReveal 3.1s ease forwards;
+}
+
+.intro-brand-title {
+  color: #ffffff;
+  font-family: var(--heading);
+  font-size: clamp(2.2rem, 9vw, 5.4rem);
+  line-height: 0.95;
+}
+
+.intro-brand-subtitle {
+  color: rgba(237, 250, 255, 0.76);
+  font-size: clamp(0.82rem, 2.8vw, 1rem);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 .intro-playing .earth-stage {
@@ -795,6 +818,10 @@
 
   .intro-logo {
     width: min(86vw, 420px);
+  }
+
+  .intro-brand {
+    width: min(88vw, 420px);
   }
 }
 
