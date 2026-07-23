@@ -1,25 +1,8 @@
-const boardItems = [
-  {
-    type: "Evento",
-    date: "Proximamente",
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  {
-    type: "Noticia",
-    date: "En monitoreo",
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-  {
-    type: "Aviso",
-    date: "Abierto",
-    title: "Lorem ipsum",
-    description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-  },
-];
+import { useLanguage } from '../i18n/LanguageContext'
 
 const SpaceBoardSection = () => {
+  const { copy } = useLanguage()
+
   return (
     <section
       className="content-section space-board-section"
@@ -27,17 +10,14 @@ const SpaceBoardSection = () => {
       aria-labelledby="space-board-title"
     >
       <div className="section-heading">
-        <p className="eyebrow">Eventos y noticias</p>
-        <h2 id="space-board-title">Tablón Espacial</h2>
-        <p>
-          Una pantalla preparada para publicar eventos, noticias relevantes, avisos internos y
-          comunicaciones importantes de BIOXIS.
-        </p>
+        <p className="eyebrow">{copy.board.eyebrow}</p>
+        <h2 id="space-board-title">{copy.board.title}</h2>
+        <p>{copy.board.description}</p>
       </div>
 
       <div className="board-timeline">
-        {boardItems.map((item) => (
-          <article className="board-item" key={item.title}>
+        {copy.board.items.map((item, index) => (
+          <article className="board-item" key={`${item.type}-${index}`}>
             <div className="board-meta">
               <span>{item.type}</span>
               <time>{item.date}</time>

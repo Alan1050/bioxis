@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage'
 import ObservatoryPage from './pages/ObservatoryPage'
 import PublicationsPage from './pages/PublicationsPage'
 import SpaceBoardPage from './pages/SpaceBoardPage'
+import { LanguageProvider } from './i18n/LanguageContext'
 
 function ScrollToTop() {
   const { hash, pathname, search } = useLocation()
@@ -49,10 +50,12 @@ function AppShell() {
 
 function App() {
   return (
-    <Router basename="/">
-      <ScrollToTop />
-      <AppShell />
-    </Router>
+    <LanguageProvider>
+      <Router basename="/">
+        <ScrollToTop />
+        <AppShell />
+      </Router>
+    </LanguageProvider>
   )
 }
 

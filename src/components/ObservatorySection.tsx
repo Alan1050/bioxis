@@ -1,13 +1,14 @@
+import { useLanguage } from '../i18n/LanguageContext'
+
 const ObservatorySection = () => {
+  const { copy } = useLanguage()
+
   return (
     <section className="content-section" id="observatorio" aria-labelledby="observatorio-title">
       <div className="section-heading">
-        <p className="eyebrow">Exploración</p>
-        <h2 id="observatorio-title">Observatorio de Señales</h2>
-        <p>
-          Un modulo base para futuras galerias, transmisiones, recursos descargables o mapas de
-          investigación.
-        </p>
+        <p className="eyebrow">{copy.observatory.eyebrow}</p>
+        <h2 id="observatorio-title">{copy.observatory.title}</h2>
+        <p>{copy.observatory.description}</p>
       </div>
     </section>
   )

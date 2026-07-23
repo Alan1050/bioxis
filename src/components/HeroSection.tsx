@@ -1,38 +1,35 @@
 import { lazy, Suspense } from 'react'
 import { Link } from 'react-router-dom'
+import { useLanguage } from '../i18n/LanguageContext'
 
-const TierraConectada3D = lazy(() => import('./TierraConectada3D'))
+const earthModule = import('./TierraConectada3D')
+const TierraConectada3D = lazy(() => earthModule)
 
-type HeroSectionProps = {
-  enableEarth?: boolean
-}
+const HeroSection = () => {
+  const { copy } = useLanguage()
 
-const HeroSection = ({ enableEarth = true }: HeroSectionProps) => {
   return (
     <section className="hero-section" id="inicio" aria-labelledby="hero-title">
       <div className="hero-copy">
-        <p className="eyebrow">El eje entre la vida y el espacio</p>
+        <p className="eyebrow">{copy.hero.eyebrow}</p>
         <h1 id="hero-title">BIOXIS</h1>
         <p className="hero-lead">
-          Plataforma de exploracion para publicaciones, misiones y colaboraciones donde la vida, la
-          ciencia y el espacio se conectan.
+          {copy.hero.lead}
         </p>
-        <div className="hero-actions" aria-label="Acciones principales">
+        <div className="hero-actions" aria-label={copy.hero.actionsAria}>
           <Link className="primary-action" to="/publicaciones">
-            Ver publicaciones
+            {copy.hero.primaryAction}
           </Link>
           <Link className="secondary-action" to="/tablon-espacial">
-            Ver tablero
+            {copy.hero.secondaryAction}
           </Link>
         </div>
       </div>
 
-      <div className="earth-stage" aria-label="Planeta Tierra conectado en 3D">
-        {enableEarth && (
-          <Suspense fallback={null}>
-            <TierraConectada3D />
-          </Suspense>
-        )}
+      <div className="earth-stage" aria-label={copy.hero.earthAria}>
+        <Suspense fallback={null}>
+          <TierraConectada3D />
+        </Suspense>
       </div>
     </section>
   )

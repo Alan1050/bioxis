@@ -3,8 +3,10 @@
 import { useEffect, useRef } from "react";
 import type { CSSProperties } from "react";
 import * as THREE from "three";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function TierraConectada3D() {
+  const { copy } = useLanguage();
   const hostRef = useRef<HTMLDivElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -13,8 +15,14 @@ export default function TierraConectada3D() {
     const canvas = canvasRef.current;
     if (!host || !canvas) return;
 
-    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false });
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+      powerPreference: "high-performance",
+    });
+    renderer.setClearColor(0x000000, 0);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, window.innerWidth < 768 ? 1.25 : 1.6));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 0.95;
@@ -31,6 +39,7 @@ export default function TierraConectada3D() {
 
     const loader = new THREE.TextureLoader();
     loader.setCrossOrigin("anonymous");
+    const maxAnisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
 
     const textureUrls = {
       earth: "https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg",
@@ -41,13 +50,13 @@ export default function TierraConectada3D() {
 
     const earthTexture = loader.load(textureUrls.earth);
     earthTexture.colorSpace = THREE.SRGBColorSpace;
-    earthTexture.anisotropy = 8;
+    earthTexture.anisotropy = maxAnisotropy;
 
     const specularTexture = loader.load(textureUrls.specular);
-    specularTexture.anisotropy = 8;
+    specularTexture.anisotropy = maxAnisotropy;
 
     const earth = new THREE.Mesh(
-      new THREE.SphereGeometry(2.15, 128, 128),
+      new THREE.SphereGeometry(2.15, 96, 96),
       new THREE.MeshPhongMaterial({
         map: earthTexture,
         specularMap: specularTexture,
@@ -59,12 +68,12 @@ export default function TierraConectada3D() {
     );
     root.add(earth);
 
-    const nightTexture = loader.load(createNightLightsTexture());
+    const nightTexture = createNightLightsTexture();
     nightTexture.colorSpace = THREE.SRGBColorSpace;
-    nightTexture.anisotropy = 8;
+    nightTexture.anisotropy = maxAnisotropy;
 
     const nightSide = new THREE.Mesh(
-      new THREE.SphereGeometry(2.158, 128, 128),
+      new THREE.SphereGeometry(2.158, 96, 96),
       new THREE.MeshBasicMaterial({
         map: nightTexture,
         color: 0xffd58a,
@@ -80,7 +89,7 @@ export default function TierraConectada3D() {
     cloudTexture.colorSpace = THREE.SRGBColorSpace;
 
     const clouds = new THREE.Mesh(
-      new THREE.SphereGeometry(2.19, 128, 128),
+      new THREE.SphereGeometry(2.19, 96, 96),
       new THREE.MeshLambertMaterial({
         map: cloudTexture,
         transparent: true,
@@ -91,7 +100,7 @@ export default function TierraConectada3D() {
     root.add(clouds);
 
     const atmosphere = new THREE.Mesh(
-      new THREE.SphereGeometry(2.27, 96, 96),
+      new THREE.SphereGeometry(2.27, 80, 80),
       new THREE.ShaderMaterial({
         transparent: true,
         side: THREE.BackSide,
@@ -131,6 +140,9 @@ export default function TierraConectada3D() {
 
     const cyan = new THREE.Color(0x5ff6ff);
     const blue = new THREE.Color(0x54a9ff);
+    const solarPanelTexture = createSolarPanelTexture();
+    solarPanelTexture.anisotropy = Math.min(4, maxAnisotropy);
+    const satellitePrototype = makeSatellite(solarPanelTexture);
 
     const orbitDefinitions = [
       { radius: 3.04, tilt: [0.65, 0.28, -0.15], width: 0.007, opacity: 0.52 },
@@ -149,7 +161,7 @@ export default function TierraConectada3D() {
 
       for (let i = 0; i < 4; i += 1) {
         const angle = (Math.PI * 2 * i) / 4 + index * 0.45;
-        const satellite = makeSatellite();
+        const satellite = satellitePrototype.clone(true);
         satellite.position.set(Math.cos(angle) * def.radius, Math.sin(angle) * def.radius, 0);
         satellite.rotation.z = angle + Math.PI / 2;
         group.add(satellite);
@@ -222,21 +234,15 @@ export default function TierraConectada3D() {
       network.add(makeArc(start, end, 0.42 + (index % 3) * 0.14, Math.random() > 0.42 ? cyan : blue));
     });
 
-    const starField = makeStarField();
-    scene.add(starField);
-
     const moonTexture = loader.load(textureUrls.moon);
     moonTexture.colorSpace = THREE.SRGBColorSpace;
 
     const moon = new THREE.Mesh(
-      new THREE.SphereGeometry(0.46, 48, 48),
+      new THREE.SphereGeometry(0.46, 40, 40),
       new THREE.MeshStandardMaterial({ map: moonTexture, roughness: 0.95 }),
     );
     moon.position.set(3.05, 2.25, -1.35);
     scene.add(moon);
-
-    const grid = makeBackgroundGrid();
-    scene.add(grid);
 
     const pointer = {
       dragging: false,
@@ -281,6 +287,7 @@ export default function TierraConectada3D() {
     const resize = () => {
       const width = host.clientWidth;
       const height = host.clientHeight;
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, width < 768 ? 1.25 : 1.6));
       renderer.setSize(width, height, false);
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
@@ -291,6 +298,7 @@ export default function TierraConectada3D() {
     resize();
 
     const clock = new THREE.Clock();
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     const animate = () => {
       const t = clock.getElapsedTime();
@@ -302,8 +310,6 @@ export default function TierraConectada3D() {
       nightSide.rotation.y = earth.rotation.y;
       clouds.rotation.y += 0.0015;
       moon.rotation.y += 0.002;
-      starField.rotation.y += 0.00008;
-      grid.position.x = Math.sin(t * 0.13) * 0.2 + 0.7;
 
       orbitGroups.forEach((group, index) => {
         group.rotation.z += group.userData.speed;
@@ -324,10 +330,39 @@ export default function TierraConectada3D() {
       renderer.render(scene, camera);
     };
 
-    renderer.setAnimationLoop(animate);
+    let isInViewport = true;
+    let isPageVisible = !document.hidden;
+
+    const updateAnimationLoop = () => {
+      if (isInViewport && isPageVisible && !prefersReducedMotion) {
+        renderer.setAnimationLoop(animate);
+      } else {
+        renderer.setAnimationLoop(null);
+        renderer.render(scene, camera);
+      }
+    };
+
+    const intersectionObserver = new IntersectionObserver(
+      ([entry]) => {
+        isInViewport = entry.isIntersecting;
+        updateAnimationLoop();
+      },
+      { threshold: 0.01 },
+    );
+
+    const onVisibilityChange = () => {
+      isPageVisible = !document.hidden;
+      updateAnimationLoop();
+    };
+
+    intersectionObserver.observe(host);
+    document.addEventListener("visibilitychange", onVisibilityChange);
+    updateAnimationLoop();
 
     return () => {
       renderer.setAnimationLoop(null);
+      intersectionObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       resizeObserver.disconnect();
       canvas.removeEventListener("pointerdown", onPointerDown);
       canvas.removeEventListener("pointermove", onPointerMove);
@@ -341,14 +376,14 @@ export default function TierraConectada3D() {
         materials.forEach((material) => material.dispose());
       });
 
-      [earthTexture, specularTexture, nightTexture, cloudTexture, moonTexture].forEach((texture) => texture.dispose());
+      [earthTexture, specularTexture, nightTexture, cloudTexture, moonTexture, solarPanelTexture].forEach((texture) => texture.dispose());
       renderer.dispose();
     };
   }, []);
 
   return (
     <div ref={hostRef} style={styles.host}>
-      <canvas ref={canvasRef} aria-label="Escena 3D de la Tierra con orbitas y satelites" style={styles.canvas} />
+      <canvas ref={canvasRef} aria-label={copy.hero.canvasAria} style={styles.canvas} />
     </div>
   );
 }
@@ -386,7 +421,7 @@ function makeOrbit(radius: number, tubeRadius: number, opacity: number, color: T
   return group;
 }
 
-function makeSatellite() {
+function makeSatellite(solarPanelTexture: THREE.Texture) {
   const group = new THREE.Group();
 
   const metal = new THREE.MeshStandardMaterial({ color: 0xc8d3d8, metalness: 0.82, roughness: 0.28 });
@@ -399,7 +434,7 @@ function makeSatellite() {
     emissiveIntensity: 0.16,
   });
   const panelMaterial = new THREE.MeshStandardMaterial({
-    map: createSolarPanelTexture(),
+    map: solarPanelTexture,
     color: 0xbfe9ff,
     metalness: 0.18,
     roughness: 0.24,
@@ -496,68 +531,6 @@ function latLonToVector3(lat: number, lon: number, radius: number) {
   );
 }
 
-function makeStarField() {
-  const group = new THREE.Group();
-  const starGeometry = new THREE.BufferGeometry();
-  const starPositions: number[] = [];
-
-  for (let i = 0; i < 650; i += 1) {
-    const r = 28 + Math.random() * 42;
-    const theta = Math.random() * Math.PI * 2;
-    const phi = Math.acos(Math.random() * 2 - 1);
-    starPositions.push(
-      r * Math.sin(phi) * Math.cos(theta),
-      r * Math.sin(phi) * Math.sin(theta),
-      r * Math.cos(phi),
-    );
-  }
-
-  starGeometry.setAttribute("position", new THREE.Float32BufferAttribute(starPositions, 3));
-  group.add(
-    new THREE.Points(
-      starGeometry,
-      new THREE.PointsMaterial({
-        color: 0xbdf8ff,
-        size: 0.035,
-        transparent: true,
-        opacity: 0.58,
-        depthWrite: false,
-      }),
-    ),
-  );
-
-  return group;
-}
-
-function makeBackgroundGrid() {
-  const group = new THREE.Group();
-  const material = new THREE.LineBasicMaterial({
-    color: 0x75eaff,
-    transparent: true,
-    opacity: 0.055,
-    depthWrite: false,
-  });
-
-  for (let i = -9; i <= 9; i += 1) {
-    group.add(
-      new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(-9, i, -8), new THREE.Vector3(9, i, -8)]),
-        material,
-      ),
-    );
-    group.add(
-      new THREE.Line(
-        new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(i, -6, -8), new THREE.Vector3(i, 6, -8)]),
-        material,
-      ),
-    );
-  }
-
-  group.position.set(0.7, 0.1, -3.8);
-  group.rotation.z = -0.04;
-  return group;
-}
-
 function createSolarPanelTexture() {
   const canvas = document.createElement("canvas");
   canvas.width = 256;
@@ -607,33 +580,33 @@ function createSolarPanelTexture() {
 
 function createNightLightsTexture() {
   const canvas = document.createElement("canvas");
-  canvas.width = 2048;
-  canvas.height = 1024;
+  canvas.width = 1024;
+  canvas.height = 512;
 
   const ctx = canvas.getContext("2d");
-  if (!ctx) return "";
+  if (!ctx) return new THREE.Texture();
 
   const cityClusters = [
-    [585, 356, 95, 52],
-    [514, 392, 60, 36],
-    [1012, 330, 116, 54],
-    [1108, 387, 78, 44],
-    [1430, 365, 130, 62],
-    [1568, 430, 92, 46],
-    [1652, 530, 82, 42],
-    [604, 590, 62, 42],
-    [620, 690, 48, 58],
-    [1306, 496, 52, 32],
-    [1518, 590, 54, 36],
+    [293, 178, 48, 26],
+    [257, 196, 30, 18],
+    [506, 165, 58, 27],
+    [554, 194, 39, 22],
+    [715, 183, 65, 31],
+    [784, 215, 46, 23],
+    [826, 265, 41, 21],
+    [302, 295, 31, 21],
+    [310, 345, 24, 29],
+    [653, 248, 26, 16],
+    [759, 295, 27, 18],
   ];
 
   cityClusters.forEach(([x, y, w, h]) => {
-    const count = Math.round((w + h) * 1.8);
+    const count = Math.round((w + h) * 1.2);
 
     for (let i = 0; i < count; i += 1) {
       const px = x + (Math.random() - 0.5) * w;
       const py = y + (Math.random() - 0.5) * h;
-      const radius = 0.8 + Math.random() * 2.4;
+      const radius = 0.4 + Math.random() * 1.2;
       const glow = ctx.createRadialGradient(px, py, 0, px, py, radius * 5.5);
       glow.addColorStop(0, "rgba(255, 225, 152, 0.95)");
       glow.addColorStop(0.25, "rgba(255, 168, 86, 0.46)");
@@ -655,17 +628,17 @@ function createNightLightsTexture() {
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  return canvas.toDataURL("image/png");
+  return new THREE.CanvasTexture(canvas);
 }
 
 const styles = {
   host: {
     position: "relative",
     width: "100%",
-    height: "100vh",
+    height: "100%",
     minHeight: 560,
     overflow: "hidden",
-    background: "#02070d",
+    background: "transparent",
     color: "#fff",
   },
   canvas: {
