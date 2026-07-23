@@ -73,11 +73,16 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
       id: "dorely-medina",
       name: "Dorely Medina Leal",
       photoUrl: null,
-      profileUrl: null,
-      specialty: "",
-      interests: [],
+      profileUrl: "https://www.linkedin.com/in/dorely-medina/",
+      specialty: "Investigación en biomedicina aeroespacial",
+      interests: [
+        "Medicina aeroespacial",
+        "Fisiología diferenciada por sexo",
+        "Arquitectura de misiones espaciales",
+        "Astrobiología",
+      ],
       biography:
-        "Representante de México en el voluntariado Alianza del Pacífico Juventud, Feminismo y Memoria en Chile y en el International Air and Space Program de la NASA, en el que desarrollé un proyecto científico y tecnológico para generar oxígeno en el espacio, además de realizar entrenamientos en S.C.U.B.A. y space walk training, entre otros. También soy creadora de Inspirar Cultivando Sueños, programa que promueve el liderazgo en jóvenes y busca combatir la deserción escolar, y del programa Ciencia para Todas por el Día Internacional de la Niña y la Mujer en la Ciencia, además de otras iniciativas sociales, científicas y tecnológicas.",
+        "Dorely Medina Leal es investigadora mexicana con enfoque en biomedicina aeroespacial, fisiología diferenciada por sexo e innovación en salud para misiones en entornos extremos. Su trabajo incluye investigaciones pioneras sobre las adaptaciones femeninas a la microgravedad y el desarrollo de Spiruoxyn, un prototipo de biología sintética para producir oxígeno y glucosa en hábitats espaciales de ciclo cerrado. En 2025 se convirtió en la primera mexicana en recibir el Global Rising Star Award del Space Generation Advisory Council, reconocimiento que la llevó a presentar su investigación en el International Astronautical Congress en Sydney, Australia. Es directora de la Delegación Nayarita de Ciencias Espaciales y coordinadora de la División Médica Aeroespacial, fundadora de Health for Her y creadora de programas de divulgación y democratización de la ciencia. Ha representado a México ante organismos e instituciones como la ONU y la Universidad de Oxford. Su trayectoria íntegra ciencia, liderazgo y compromiso social, con una visión centrada en transformar la manera en que la medicina acompaña la exploración espacial.",
     },
     areas: [
       {
@@ -85,7 +90,7 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
         name: "Medicina Espacial",
         summary:
           "Salud, biología y bienestar humano aplicados a los retos de la exploración espacial.",
-        logoAlt: "Logotipo del área de Medicina Espacial de BIOXIS",
+        logoAlt: "Logotipo de la División de Medicina Espacial de BIOXIS",
         people: [
           {
             id: "lenin-rosales",
@@ -144,7 +149,7 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
         name: "Ingeniería",
         summary:
           "Tecnología, software e infraestructura para desarrollar soluciones de investigación y exploración.",
-        logoAlt: "Logotipo del área de Ingeniería de BIOXIS",
+        logoAlt: "Logotipo de la División de Ingeniería de BIOXIS",
         people: [
           {
             id: "alan-medina",
@@ -172,7 +177,7 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
         name: "Divulgación Científica",
         summary:
           "Comunicación y experiencias que acercan la ciencia y el espacio a nuevas comunidades.",
-        logoAlt: "Logotipo del área de Divulgación Científica de BIOXIS",
+        logoAlt: "Logotipo de la División de Divulgación Científica de BIOXIS",
         people: [
           {
             id: "willian-valdivia",
@@ -202,11 +207,16 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
       id: "dorely-medina",
       name: "Dorely Medina Leal",
       photoUrl: null,
-      profileUrl: null,
-      specialty: "",
-      interests: [],
+      profileUrl: "https://www.linkedin.com/in/dorely-medina/",
+      specialty: "Aerospace biomedical research",
+      interests: [
+        "Aerospace medicine",
+        "Sex-differentiated physiology",
+        "Space mission architecture",
+        "Astrobiology",
+      ],
       biography:
-        "I represented Mexico in the Pacific Alliance volunteer program Youth, Feminism, and Memory in Chile and in NASA’s International Air and Space Program, where I developed a scientific and technological project to generate oxygen in space and completed training in S.C.U.B.A. and space walk training, among other activities. I am also the creator of Inspirar Cultivando Sueños, a program that promotes youth leadership and seeks to combat school dropout, and Ciencia para Todas, created for the International Day of Women and Girls in Science, in addition to other social, scientific, and technological initiatives.",
+        "Dorely Medina Leal is a Mexican researcher focused on aerospace biomedicine, sex-differentiated physiology, and health innovation for missions in extreme environments. Her work includes pioneering research on female adaptations to microgravity and the development of Spiruoxyn, a synthetic biology prototype designed to produce oxygen and glucose in closed-loop space habitats. In 2025, she became the first Mexican to receive the Space Generation Advisory Council’s Global Rising Star Award, recognition that led her to present her research at the International Astronautical Congress in Sydney, Australia. She is director of the Nayarit Delegation for Space Sciences and coordinator of the Aerospace Medical Division, founder of Health for Her, and creator of science outreach and democratization programs. She has represented Mexico before organizations and institutions including the United Nations and the University of Oxford. Her career combines science, leadership, and social commitment, with a vision centered on transforming the way medicine supports space exploration.",
     },
     areas: [
       {
@@ -214,7 +224,7 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
         name: "Space Medicine",
         summary:
           "Health, biology, and human wellbeing applied to the challenges of space exploration.",
-        logoAlt: "BIOXIS Space Medicine area logo",
+        logoAlt: "BIOXIS Space Medicine Division logo",
         people: [
           {
             id: "lenin-rosales",
@@ -269,7 +279,7 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
         name: "Engineering",
         summary:
           "Technology, software, and infrastructure for developing research and exploration solutions.",
-        logoAlt: "BIOXIS Engineering area logo",
+        logoAlt: "BIOXIS Engineering Division logo",
         people: [
           {
             id: "alan-medina",
@@ -297,7 +307,7 @@ export const collaboratorsByLanguage: Record<Language, CollaboratorsDirectory> =
         name: "Science Communication",
         summary:
           "Communication and experiences that bring science and space to new communities.",
-        logoAlt: "BIOXIS Science Communication area logo",
+        logoAlt: "BIOXIS Science Communication Division logo",
         people: [
           {
             id: "willian-valdivia",
